@@ -151,8 +151,11 @@
           </thead>
           <tbody>
             <tr th:each="item:${itemList}">
-              <td class="item-name" th:text="${item.name}">
-                <a href="./detail.html">Razer BlackWidow Chroma Keyboard</a>
+              <td class="item-name">
+                <a
+                  th:href="@{/detail?id=} + ${item.id}"
+                  th:text="${item.name}"
+                ></a>
               </td>
               <td class="item-price" th:text="${item.price}">52.0</td>
               <td class="item-category" th:text="${item.category}">
@@ -183,13 +186,17 @@
         </nav>
         <!-- ページ番号を指定して表示するフォーム -->
         <div id="select-page">
-          <form class="form-inline">
+          <form
+            class="form-inline"
+            method="post"
+            th:action="@{/list/selectpage}"
+          >
             <div class="form-group">
               <div class="input-group col-xs-6">
                 <label></label>
-                <input type="text" class="form-control" />
+                <input name="num1" type="text" class="form-control" />
                 <!-- 総ページ数 -->
-                <div class="input-group-addon">/ 20</div>
+                <div class="input-group-addon" th:text="${maxPage}">/ 20</div>
               </div>
               <div class="input-group col-xs-1">
                 <button type="submit" class="btn btn-default">Go</button>

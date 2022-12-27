@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Item;
@@ -19,8 +20,8 @@ public class ShowItemListController {
 	@Autowired
 	private ShowItemService showItemService;
 	
-//	@Autowired
-//	private ShowItemListRepository showItemListRepository;
+	@Autowired
+	private ShowItemListRepository showItemListRepository;
 	
 	// １ページの最大表示数
 	public static final int OUTPUT_NUM = 100;
@@ -35,11 +36,17 @@ public class ShowItemListController {
 	private int maxPage;
 	
 
+	/**
+	 * 商品一覧画面へ遷移.
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("")
 	public String showItemList(Model model) {
-//		recordNum = showItemListRepository.recordNum();
-//		maxPage = recordNum / OUTPUT_NUM;
-//		System.out.println("総ページ数=" + maxPage);
+		recordNum = showItemListRepository.recordNum();
+		maxPage = recordNum / OUTPUT_NUM;
+		model.addAttribute("maxPage", maxPage);
 		List<Item> itemList = showItemService.showItemList(OUTPUT_NUM);
 		model.addAttribute("itemList", itemList);
 		return "list";
@@ -48,22 +55,36 @@ public class ShowItemListController {
 	@GetMapping("/next")
 	public String turnPage(Integer num1, Model model) {
 		currentPage += num1;
-		//1ページよりも前に戻ろうとすると１ページ目に遷移するようにしている
+		//1ページよりも前に戻ろうとすると１ページ目に遷移するようにしているif文
 		if(currentPage <= 0) {
 			currentPage = 0;
 			return "redirect:/list";
 		}
 		int num2 = OUTPUT_NUM * currentPage;
 		List<Item> itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
-		//最後のページ以降に行こうとすると直前のページに戻るようにする
+		//最後のページ以降に行こうとすると直前のページに戻るようにするif文
 		if(itemList == null) {
 			currentPage -= 1;
 			num2 = OUTPUT_NUM * currentPage;
 			itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
 		}
+		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("itemList", itemList);
 		return "list";
 	}
+	
+	@PostMapping("/selectpage")
+	public String selectPage(Integer num1, Model model) {
+		currentPage = 0;
+		currentPage = num1 - 1;
+		int num2 = OUTPUT_NUM * currentPage;
+		List<Item> itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("itemList", itemList);
+		return "list";
+	}
+	
+	
 	
 
 }
