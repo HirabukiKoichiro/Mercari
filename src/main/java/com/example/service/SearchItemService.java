@@ -17,7 +17,7 @@ public class SearchItemService {
 	@Autowired
 	private  SearchItemRepository  searchItemRepository;
 	
-	public List<Item> searchItemName(int OUTPUT_NUM, SearchItemForm searchItemForm) {
+	public List<Item> search(int OUTPUT_NUM, SearchItemForm searchItemForm) {
 		String sql = "SELECT i.id, i.name, i.condition, c.name_all AS category, i.brand, i.price, i.shipping, i.description FROM items i INNER JOIN category c ON i.category = c.id ";
 		sql += "WHERE i.name ILIKE " + "'" + "%" + searchItemForm.getName() + "%" + "'" + " AND i.brand ILIKE " + "'" + "%" + searchItemForm.getBrand() + "%" + "' ";
 		
@@ -28,7 +28,7 @@ public class SearchItemService {
 		return searchItemRepository.findByName(sql);
 	}
 	
-	public List<Item> searcItem(int OUTPUT_NUM, int num2, SearchItemForm searchItemForm2) {
+	public List<Item> turnPage(int OUTPUT_NUM, int num2, SearchItemForm searchItemForm2) {
 		String sql = "SELECT i.id, i.name, i.condition, c.name_all AS category, i.brand, i.price, i.shipping, i.description FROM items i INNER JOIN category c ON i.category = c.id ";
 		sql += "WHERE i.name ILIKE " + "'" + "%" + searchItemForm2.getName() + "%" + "'" + " AND i.brand ILIKE " + "'" + "%" + searchItemForm2.getBrand() + "%" + "' ";
 		

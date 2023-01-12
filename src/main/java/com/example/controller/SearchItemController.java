@@ -46,7 +46,7 @@ public class SearchItemController {
 		model.addAttribute("bigCategoryList", bigCategoryList);	
 		searchItemForm2 = null;
 		searchItemForm2 = searchItemForm;
-		List<Item> itemList = searchItemService.searchItemName(OUTPUT_NUM, searchItemForm);
+		List<Item> itemList = searchItemService.search(OUTPUT_NUM, searchItemForm);
 		model.addAttribute("itemList", itemList);
 		return "searchItemList";
 	}
@@ -62,12 +62,12 @@ public class SearchItemController {
 			return "redirect:/search";
 		}
 		int num2 = OUTPUT_NUM * currentPage;
-		List<Item> itemList = searchItemService.searcItem(OUTPUT_NUM, num2, searchItemForm2);
+		List<Item> itemList = searchItemService.turnPage(OUTPUT_NUM, num2, searchItemForm2);
 		//最後のページ以降に行こうとすると直前のページに戻るようにするif文
 		if(itemList == null) {
 			currentPage -= 1;
 			num2 = OUTPUT_NUM * currentPage;
-			itemList = searchItemService.searcItem(OUTPUT_NUM, num2, searchItemForm2);
+			itemList = searchItemService.turnPage(OUTPUT_NUM, num2, searchItemForm2);
 		}
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("itemList", itemList);
