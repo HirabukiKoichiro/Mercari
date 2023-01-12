@@ -28,12 +28,12 @@ public class SearchItemService {
 		return searchItemRepository.findByName(sql);
 	}
 	
-	public List<Item> turnPage(int OUTPUT_NUM, int num2, SearchItemForm searchItemForm2) {
+	public List<Item> turnPage(int OUTPUT_NUM, int num2, SearchItemForm searchLog) {
 		String sql = "SELECT i.id, i.name, i.condition, c.name_all AS category, i.brand, i.price, i.shipping, i.description FROM items i INNER JOIN category c ON i.category = c.id ";
-		sql += "WHERE i.name ILIKE " + "'" + "%" + searchItemForm2.getName() + "%" + "'" + " AND i.brand ILIKE " + "'" + "%" + searchItemForm2.getBrand() + "%" + "' ";
+		sql += "WHERE i.name ILIKE " + "'" + "%" + searchLog.getName() + "%" + "'" + " AND i.brand ILIKE " + "'" + "%" + searchLog.getBrand() + "%" + "' ";
 		
-		if(searchItemForm2.getSmallCategory() != null) {
-			sql += "AND i.category=" + searchItemForm2.getSmallCategory() + " ";
+		if(searchLog.getSmallCategory() != null) {
+			sql += "AND i.category=" + searchLog.getSmallCategory() + " ";
 		}
 		sql += "ORDER BY id LIMIT " + OUTPUT_NUM + "OFFSET " + num2 + ";";
 		return searchItemRepository.findByName(sql);
