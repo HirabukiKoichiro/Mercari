@@ -1,26 +1,21 @@
-package com.example.form;
+package com.example.domain;
 
-import jakarta.validation.constraints.NotBlank;
-
-public class ItemForm {
-
+public class NewItem {
 	
-	private String id;
-	
-	@NotBlank(message="名前は必須です")
+	private Integer id;
 	private String name;
-	private String condition;
-	private String category;
+	private Integer condition;
+	private Integer category;
 	private String brand;
-	private String price;
-	private String shipping;
+	private Double price;
+	private Integer shipping;
 	private String description;
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -32,19 +27,19 @@ public class ItemForm {
 		this.name = name;
 	}
 
-	public String getCondition() {
+	public Integer getCondition() {
 		return condition;
 	}
 
-	public void setCondition(String condition) {
+	public void setCondition(Integer condition) {
 		this.condition = condition;
 	}
 
-	public String getCategory() {
+	public Integer getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Integer category) {
 		this.category = category;
 	}
 
@@ -56,19 +51,19 @@ public class ItemForm {
 		this.brand = brand;
 	}
 
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	public String getShipping() {
+	public Integer getShipping() {
 		return shipping;
 	}
 
-	public void setShipping(String shipping) {
+	public void setShipping(Integer shipping) {
 		this.shipping = shipping;
 	}
 
@@ -82,7 +77,7 @@ public class ItemForm {
 
 	@Override
 	public String toString() {
-		return "ItemForm [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category
+		return "NewItem [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category
 				+ ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description=" + description
 				+ "]";
 	}

@@ -5,7 +5,7 @@ $(function () {
     $("#mediumCategory > option").remove();
 
     $.ajax({
-      url: "http://localhost:8080/add/mediumcategory",
+      url: "http://localhost:8080/category/mediumcategory",
       type: "POST",
       dataType: "json",
       data: {
@@ -28,7 +28,7 @@ $(function () {
     $("#smallCategory > option").remove();
 
     $.ajax({
-      url: "http://localhost:8080/add/smallcategory",
+      url: "http://localhost:8080/category/smallcategory",
       type: "POST",
       dataType: "json",
       data: {

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Item;
+import com.example.domain.NewItem;
 
 @Repository
 public class AddItemRepository {
@@ -14,8 +15,8 @@ public class AddItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
-	public void insert(Item item) {
-		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+	public void insert(NewItem newItem) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(newItem);
 		String sql = "Insert into items(name, condition, category, brand, price, shipping, description) values(:name, :condition, :category, :brand, :price, :shipping, :description);";
 		template.update(sql, param);
 	}

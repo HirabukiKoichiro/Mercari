@@ -1,5 +1,4 @@
 package com.example.controller;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchItemForm;
-import com.example.repository.ShowItemListRepository;
 import com.example.service.CategoryService;
-import com.example.service.ShowItemService;
+import com.example.service.SearchItemService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/list")
-public class ShowItemListController {
+@RequestMapping("/search")
+public class SearchItemController {
 	
 	@Autowired
-	private ShowItemService showItemService;
-	
-	@Autowired
-	private ShowItemListRepository showItemListRepository;
-	
-	@Autowired
-	private CategoryService categoryService;
+	private SearchItemService searchItemService;
 	
 	// １ページの最大表示数
-	public static final int OUTPUT_NUM = 100;
+	public static final int OUTPUT_NUM = 30;
 	
 	// itemsテーブルのレコード総数
 	private int recordNum;
@@ -41,57 +35,43 @@ public class ShowItemListController {
 	// 全レコードの件数から算出されるページ数（recordNum/outputNum）
 	private int maxPage;
 	
-
-	/**
-	 * 商品一覧画面へ遷移.
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@GetMapping("")
-	public String showItemList(Model model, SearchItemForm searchItemForm) {
+	private SearchItemForm searchItemForm2 = null;
+	
+	@Autowired
+	private CategoryService categoryService;
+	
+	@PostMapping("")
+	public String searchItem(SearchItemForm searchItemForm, Model model) {
 		List<Category> bigCategoryList = categoryService.bigCategoryList();
 		model.addAttribute("bigCategoryList", bigCategoryList);	
-		recordNum = showItemListRepository.recordNum();
-		maxPage = recordNum / OUTPUT_NUM;
-		model.addAttribute("maxPage", maxPage);
-		List<Item> itemList = showItemService.showItemList(OUTPUT_NUM);
+		searchItemForm2 = null;
+		searchItemForm2 = searchItemForm;
+		List<Item> itemList = searchItemService.searchItemName(OUTPUT_NUM, searchItemForm);
 		model.addAttribute("itemList", itemList);
-		return "list";
+		return "searchItemList";
 	}
+	
 	@GetMapping("/next")
-	public String turnPage(Integer num1, Model model, SearchItemForm searchItemForm) {
+	public String turnPage(Integer num1, Model model, SearchItemForm searchItemForm) {	
+		List<Category> bigCategoryList = categoryService.bigCategoryList();
+		model.addAttribute("bigCategoryList", bigCategoryList);	
 		currentPage += num1;
 		//1ページよりも前に戻ろうとすると１ページ目に遷移するようにしているif文
 		if(currentPage <= 0) {
 			currentPage = 0;
-			return "redirect:/list";
+			return "redirect:/search";
 		}
 		int num2 = OUTPUT_NUM * currentPage;
-		List<Item> itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
+		List<Item> itemList = searchItemService.searcItem(OUTPUT_NUM, num2, searchItemForm2);
 		//最後のページ以降に行こうとすると直前のページに戻るようにするif文
 		if(itemList == null) {
 			currentPage -= 1;
 			num2 = OUTPUT_NUM * currentPage;
-			itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
+			itemList = searchItemService.searcItem(OUTPUT_NUM, num2, searchItemForm2);
 		}
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("itemList", itemList);
-		return "list";
+		return "searchItemList";
 	}
-	
-	@PostMapping("/selectpage")
-	public String selectPage(Integer num1, Model model, SearchItemForm searchItemForm) {
-		currentPage = 0;
-		currentPage = num1 - 1;
-		int num2 = OUTPUT_NUM * currentPage;
-		List<Item> itemList = showItemService.limitAndOffset(OUTPUT_NUM, num2);
-		model.addAttribute("maxPage", maxPage);
-		model.addAttribute("itemList", itemList);
-		return "list";
-	}
-	
-	
-	
 
 }
