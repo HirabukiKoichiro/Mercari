@@ -17,5 +17,6 @@ public class EditService {
 	public NewItem showEdit(Integer id) {
 		return editRepository.load(id);
 	}
+	
 
 }
